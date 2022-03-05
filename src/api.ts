@@ -3,11 +3,12 @@ export const app = express();
 
 // Allows cross origin requests
 import cors from 'cors';
+
 app.use(cors({ origin: true }));
 
 
 app.use(express.json());
-
+// post request issue with insomnia
 
 app.post('/test', (req: Request, res: Response) => {
   const amount = req.body.amount;
