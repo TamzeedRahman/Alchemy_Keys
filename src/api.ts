@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 export const app = express();
-
+import { createPaymentIntent } from './payments';
 import { createStripeCheckoutSession } from './checkout';
 
 // Allows cross origin requests
@@ -14,6 +14,18 @@ app.use(express.json());
 
 
 
+/**
+ * Payment Intents
+ */
+
+ app.post(
+    '/payments',
+    runAsync(async ({ body }: Request, res: Response) => {
+      res.send(
+        await createPaymentIntent(body.amount)
+      );
+    })
+  );
 
   
   /**
@@ -31,6 +43,6 @@ app.use(express.json());
  */
  function runAsync(callback: Function) {
     return (req: Request, res: Response, next: NextFunction) => {
-      callback(req, res, next).catch(next);
+      callback(req, res, next).catch(next);// reusuable endpoint
     };
   }
