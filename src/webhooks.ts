@@ -2,42 +2,30 @@ import { stripe } from './';
 import Stripe from 'stripe';
 
 
-
-
-// Environment Variables (Stripe API Key)
-import { config } from "dotenv"
-if (process.env.NODE_ENV !== 'production') {
-    config();
-}
-
-// Initialize Stripe
-import Stripe from 'stripe'; 
-export const stripe = new Stripe(process.env.STRIPE_SECRET, { 
-    apiVersion: '2020-03-02',
-});
-
-
-// Start the API with Express
-import { app, } from './api';
-const port = process.env.PORT || 3333;
-app.listen(port, () => console.log(`API available on http://localhost:${port}`));
-
-
 /**
  * Business logic for specific webhook event types
  */
 const webhookHandlers = {
-
+    'checkout.session.completed': async (data: Stripe.Event.Data) => {
+     
+    },
     'payment_intent.succeeded': async (data: Stripe.PaymentIntent) => {
-      // Add your business logic here
+    
     },
     'payment_intent.payment_failed': async (data: Stripe.PaymentIntent) => {
-      // Add your business logic here
+   
     },
+    },
+    'invoice.payment_succeeded': async (data: Stripe.Invoice) => {
+      
+    },
+    'invoice.payment_failed': async (data: Stripe.Invoice) => {
+      
+    }
 }
 
 /**
- * Validate the stripe webhook secret, then call the handler for the event type
+ * Validate the stripe webhook secret
  */
 export const handleStripeWebhook = async(req, res) => {
   const sig = req.headers['stripe-signature'];

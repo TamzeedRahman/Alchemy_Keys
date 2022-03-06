@@ -10,9 +10,15 @@ app.use(cors({ origin: true }));
 
 
 app.use(express.json());
-// post request issue with insomnia
 
 
+
+//body buffer middleware
+app.use(
+  express.json({
+    verify: (req, res, buffer) => (req['rawBody'] = buffer),
+  })
+);
 
 /**
  * Payment Intents
